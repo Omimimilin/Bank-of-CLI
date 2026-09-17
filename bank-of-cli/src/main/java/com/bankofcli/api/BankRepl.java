@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import com.bankofcli.persistence.ConnectionFactory;
 
+/* Handles options, taking user inputs */
 public class BankRepl {
 
     private final Scanner SCAN = new Scanner(System.in);
