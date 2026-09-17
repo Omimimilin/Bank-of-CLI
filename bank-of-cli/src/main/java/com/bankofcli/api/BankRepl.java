@@ -1,6 +1,8 @@
 package com.bankofcli.api;
-
+import java.sql.Connection;
 import java.util.Scanner;
+
+import com.bankofcli.persistence.ConnectionFactory;
 
 public class BankRepl {
 
@@ -11,6 +13,18 @@ public class BankRepl {
     }
 
     public void run(){
+        ConnectionFactory factory =
+                ConnectionFactory.getConnectionFactory();
+
+        try (Connection connection = factory.getConnection()) {
+
+            System.out.println("Successfully connected to PostgreSQL!");
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
         while(true){
             System.out.println("Welcome to Bank of CLI\n1. Login\n2. Register\n3. Help\n4. Exit\nPlease choose an option using numbers 1-4");
             int command = SCAN.nextInt();

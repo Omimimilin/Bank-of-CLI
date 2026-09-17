@@ -1,10 +1,10 @@
-package com.bankofcli.service;
+// package com.bankofcli.service;
 
-import java.util.List;
+// import java.util.List;
 
-import com.bankofcli.domain.Account;
+// import com.bankofcli.domain.Account;
 
-public interface BankService {
-    void addAccount(Account account);
-    List<Account> findAllAccount();
-}
+// public interface BankService {
+//     void addAccount(Account account);
+//     List<Account> findAllAccount();
+// }

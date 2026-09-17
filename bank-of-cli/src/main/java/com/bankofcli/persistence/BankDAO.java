@@ -1,13 +1,13 @@
-package com.bankofcli.persistence;
+// package com.bankofcli.persistence;
 
-import java.util.List;
+// import java.util.List;
 
-import com.bankofcli.domain.Account;
+// import com.bankofcli.domain.Account;
 
-public interface BankDAO {
-    void addAccount(Account account);
-    //Account getAccountById(int id);
-    List<Account> getAllAccounts();
-    //void updateAccount(Account account);
-    //void deleteAccount(int id);
-}
+// public interface BankDAO {
+//     void addAccount(Account account);
+//     //Account getAccountById(int id);
+//     List<Account> getAllAccounts();
+//     //void updateAccount(Account account);
+//     //void deleteAccount(int id);
+// }
