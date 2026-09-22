@@ -1,28 +1,32 @@
-// package com.bankofcli.service;
+package com.bankofcli.service;
 
-// import com.bankofcli.domain.Account;
-// import com.bankofcli.persistence.BankDAO;
+import com.bankofcli.domain.Account;
+import com.bankofcli.persistence.BankRepository;
 
-// import java.util.List;
+public class BankServiceImpl implements BankService {
+    private final BankRepository bankRepository;
 
-// public class BankServiceImpl implements BankService {
-//     private final BankDAO bankDAO;
+    public BankServiceImpl(BankRepository bankRepository){
+        this.bankRepository = bankRepository;
+    }
 
-//     public BankServiceImpl(BankDAO bankDAO){
-//         this.bankDAO = bankDAO;
-//     }
+    @Override
+    public void createAccount(Account account) {
+        if (bankRepository.findAccountById(account.getAccountId()) != null) {
+            throw new IllegalArgumentException("Account ID already exists.");
+        }
 
-//     @Override
-//     public void addAccount(Account account){
-//         if(BankDAO.getAccountById(account.getId()) != null){
-//             throw new IllegalArgumentException("Account Id already exist.");
-//         }
+        bankRepository.createAccount(account);
+    }
 
-//         bankDAO.addAccount(account);
-//     }
-    
-//     @Override
-//     public List<Account> findAllAccounts(){
-//         return bankDAO.getAllAccounts();
-//     } 
-// }
+    @Override
+    public Account login(int accountId, int pin) {
+        Account account = bankRepository.findAccountById(accountId);
+
+        if (account == null || account.getPin() != pin) {
+            throw new IllegalArgumentException("Invalid account ID or PIN.");
+        }
+
+        return account;
+    }
+}
