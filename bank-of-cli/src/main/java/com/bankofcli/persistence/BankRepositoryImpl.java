@@ -68,4 +68,74 @@ public class BankRepositoryImpl implements BankRepository{
             throw new IllegalStateException("Could not find account", e);
         }
     }
+
+    @Override
+    public Account deposit(int accountId, BigDecimal amount){
+        String sql = """
+            UPDATE accounts
+            SET balance = balance + ?
+            WHERE account_id = ?
+            RETURNING account_id, pin, balance
+            """;
+
+        try (Connection connection = ConnectionFactory
+                .getConnectionFactory()
+                .getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setBigDecimal(1, amount);
+            statement.setInt(2, accountId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                if (resultSet.next()) {
+                    return new Account(
+                            resultSet.getInt("account_id"),
+                            resultSet.getInt("pin"),
+                            resultSet.getBigDecimal("balance")
+                    );
+                }
+
+                throw new IllegalArgumentException("Account does not exist.");
+            }
+
+        } catch (SQLException e) {
+            throw new IllegalStateException("Could not deposit", e);
+        }
+    }
+
+    @Override
+    public Account withdraw(int accountId, BigDecimal amount){
+        String sql = """
+                UPDATE accounts
+                SET balance = balance - ?
+                WHERE account_id = ?
+                RETURNING account_id, pin, balance
+                """;
+        
+        try (Connection connection = ConnectionFactory
+            .getConnectionFactory()
+            .getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)) {
+
+        statement.setBigDecimal(1, amount);
+        statement.setInt(2, accountId);
+
+        try (ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return new Account(
+                        resultSet.getInt("account_id"),
+                        resultSet.getInt("pin"),
+                        resultSet.getBigDecimal("balance")
+                );
+            }
+
+            throw new IllegalArgumentException("Account does not exist.");
+        }
+
+        } catch (SQLException e) {
+            throw new IllegalStateException("Could not withdraw", e);
+        }
+    }
 }

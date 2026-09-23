@@ -1,12 +1,12 @@
 package com.bankofcli.api;
+import java.math.BigDecimal;
 import java.util.Scanner;
 
-import com.bankofcli.service.BankServiceImpl;
-import com.bankofcli.service.BankService;
+import com.bankofcli.domain.Account;
 import com.bankofcli.persistence.BankRepository;
 import com.bankofcli.persistence.BankRepositoryImpl;
-import com.bankofcli.domain.Account;
-import java.math.BigDecimal;
+import com.bankofcli.service.BankService;
+import com.bankofcli.service.BankServiceImpl;
 
 /* Handles options, taking user inputs */
 public class BankRepl {
@@ -56,6 +56,7 @@ public class BankRepl {
 
         System.out.println("Login successful.");
         System.out.println("Current balance: $" + account.getBalance());
+        showAccountMenu(account);
     }
 
     private void printRegister(){
@@ -77,4 +78,63 @@ public class BankRepl {
         System.out.println("Login - Log into your account");
         System.out.println("Exit - Exit the application");
     }
+
+    private void showAccountMenu(Account account){
+        while(true){
+            System.out.println("Account Menu:");
+            System.out.println("1. Check Balance");
+            System.out.println("2. Deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Transfer");
+            System.out.println("5. Transaction History");
+            System.out.println("6. Logout");
+            int command = SCAN.nextInt();
+            try{
+                switch (command) {
+                    case 1 -> checkBalance(account);
+                    case 2 -> account = deposit(account);
+                    case 3 -> account = withdraw(account);
+                    case 4 -> System.out.println("Transfer selected.");
+                    case 5 -> System.out.println("Transaction History selected.");
+                    case 6 -> {
+                        System.out.println("Logging out...");
+                        return;
+                    }
+                    default -> System.out.println("Invalid option.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+
+    private void checkBalance(Account account) {
+        System.out.println("Current balance: $" + account.getBalance());
+    }
+
+    private Account deposit(Account account) {
+        System.out.println("Enter deposit amount:");
+        BigDecimal amount = SCAN.nextBigDecimal();
+
+        Account updatedAccount = bankService.deposit(account.getAccountId(), amount);
+
+        System.out.println("Deposit successful.");
+        System.out.println("Current balance: $" + updatedAccount.getBalance());
+
+        return updatedAccount;
+    }
+
+    private Account withdraw(Account account) {
+        System.out.println("Enter withdrawal amount:");
+        BigDecimal amount = SCAN.nextBigDecimal();
+
+        Account updatedAccount =
+                bankService.withdraw(account.getAccountId(), amount);
+
+        System.out.println("Withdrawal successful.");
+        System.out.println("Current balance: $" + updatedAccount.getBalance());
+
+        return updatedAccount;
+    }
+
 }
