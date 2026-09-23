@@ -16,4 +16,8 @@
 --     FOREIGN KEY (related_account_id) REFERENCES accounts(account_id)
 -- );
 
-SELECT * FROM accounts
+DELETE FROM transactions
+WHERE account_id = 1001;
+
+DELETE FROM accounts
+WHERE account_id = 1001;

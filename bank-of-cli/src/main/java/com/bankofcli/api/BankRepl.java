@@ -1,8 +1,10 @@
 package com.bankofcli.api;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Scanner;
 
 import com.bankofcli.domain.Account;
+import com.bankofcli.domain.Transaction;
 import com.bankofcli.persistence.BankRepository;
 import com.bankofcli.persistence.BankRepositoryImpl;
 import com.bankofcli.service.BankService;
@@ -95,7 +97,7 @@ public class BankRepl {
                     case 2 -> account = deposit(account);
                     case 3 -> account = withdraw(account);
                     case 4 -> account = transfer(account);
-                    case 5 -> System.out.println("Transaction History selected.");
+                    case 5 -> showTransactionHistory(account);
                     case 6 -> {
                         System.out.println("Logging out...");
                         return;
@@ -154,5 +156,43 @@ public class BankRepl {
         System.out.println("Current balance: $" + updatedAccount.getBalance());
 
         return updatedAccount;
+    }
+
+    private void showTransactionHistory(Account account) {
+
+        List<Transaction> transactions =
+                bankService.getTransactionHistory(account.getAccountId());
+
+        if (transactions.isEmpty()) {
+            System.out.println("No transactions found.");
+            return;
+        }
+
+        System.out.println("\nTransaction History:");
+
+        for (Transaction transaction : transactions) {
+
+            System.out.print(
+                    "Transaction ID: " + transaction.getTransactionId()
+                    + " | Type: " + transaction.getTransactionType()
+                    + " | Amount: $" + transaction.getAmount()
+            );
+
+            if (transaction.getRelatedAccountId() != null) {
+                if (transaction.getTransactionType().equals("TRANSFER_OUT")) {
+                    System.out.print(
+                            " | To Account: " + transaction.getRelatedAccountId()
+                    );
+                } else if (transaction.getTransactionType().equals("TRANSFER_IN")) {
+                    System.out.print(
+                            " | From Account: " + transaction.getRelatedAccountId()
+                    );
+                }
+            }
+
+            System.out.println(
+                    " | Date: " + transaction.getCreatedAt()
+            );
+        }
     }
 }

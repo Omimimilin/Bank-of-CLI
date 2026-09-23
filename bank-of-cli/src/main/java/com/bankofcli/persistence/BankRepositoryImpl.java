@@ -5,8 +5,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.bankofcli.domain.Account;
+import com.bankofcli.domain.Transaction;
 
 public class BankRepositoryImpl implements BankRepository{
 
@@ -19,9 +22,6 @@ public class BankRepositoryImpl implements BankRepository{
 
         try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
-            
-            System.out.println("Database: " + connection.getCatalog());
-            System.out.println("Schema: " + connection.getSchema());
             
             statement.setInt(1, account.getAccountId());
             statement.setInt(2, account.getPin());
@@ -184,6 +184,87 @@ public class BankRepositoryImpl implements BankRepository{
         } catch (SQLException e) {
             throw new IllegalStateException(
                     "Could not complete transfer", e);
+        }
+    }
+
+    @Override
+    public List<Transaction> findTransactionsByAccountId(int accountId) {
+
+        String sql = """
+                SELECT transaction_id,
+                    account_id,
+                    transaction_type,
+                    amount,
+                    related_account_id,
+                    created_at
+                FROM transactions
+                WHERE account_id = ?
+                ORDER BY created_at DESC
+                """;
+
+        List<Transaction> transactions = new ArrayList<>();
+
+        try (Connection connection = ConnectionFactory
+                .getConnectionFactory()
+                .getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+                statement.setInt(1, accountId);
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+
+                    while (resultSet.next()) {
+
+                        Transaction transaction = new Transaction(
+                                resultSet.getInt("transaction_id"),
+                                resultSet.getInt("account_id"),
+                                resultSet.getString("transaction_type"),
+                                resultSet.getBigDecimal("amount"),
+                                (Integer) resultSet.getObject("related_account_id"),
+                                resultSet.getTimestamp("created_at").toLocalDateTime()
+                        );
+
+                        transactions.add(transaction);
+                    }
+                }
+
+                return transactions;
+
+        } catch (SQLException e) {
+            throw new IllegalStateException(
+                    "Could not retrieve transaction history", e);
+        }
+    }
+
+    @Override
+    public void createTransaction(Transaction transaction) {
+
+        String sql = """
+                INSERT INTO transactions
+                    (account_id, transaction_type, amount, related_account_id)
+                VALUES (?, ?, ?, ?)
+                """;
+
+        try (Connection connection = ConnectionFactory
+                .getConnectionFactory()
+                .getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, transaction.getAccountId());
+            statement.setString(2, transaction.getTransactionType());
+            statement.setBigDecimal(3, transaction.getAmount());
+
+            if (transaction.getRelatedAccountId() == null) {
+                statement.setNull(4, java.sql.Types.INTEGER);
+            } else {
+                statement.setInt(4, transaction.getRelatedAccountId());
+            }
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new IllegalStateException(
+                    "Could not create transaction", e);
         }
     }
 }

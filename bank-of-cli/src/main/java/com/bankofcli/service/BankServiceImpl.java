@@ -1,8 +1,10 @@
 package com.bankofcli.service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.bankofcli.domain.Account;
+import com.bankofcli.domain.Transaction;
 import com.bankofcli.persistence.BankRepository;
 
 public class BankServiceImpl implements BankService {
@@ -42,7 +44,20 @@ public class BankServiceImpl implements BankService {
             throw new IllegalArgumentException("Account does not exist.");
         }
 
-        return bankRepository.deposit(accountId, amount);
+        Account updatedAccount = bankRepository.deposit(accountId, amount);
+
+        Transaction transaction = new Transaction(
+                0,
+                accountId,
+                "DEPOSIT",
+                amount,
+                null,
+                null
+        );
+
+        bankRepository.createTransaction(transaction);
+
+        return updatedAccount;
     }
 
     @Override 
@@ -62,7 +77,20 @@ public class BankServiceImpl implements BankService {
             throw new IllegalArgumentException("Insufficient funds.");
         }
 
-        return bankRepository.withdraw(accountId, amount);
+        Account updatedAccount = bankRepository.withdraw(accountId, amount);
+
+        Transaction transaction = new Transaction(
+                0,
+                accountId,
+                "WITHDRAW",
+                amount,
+                null,
+                null
+        );
+
+        bankRepository.createTransaction(transaction);
+
+        return updatedAccount;
     }
 
     @Override
@@ -98,6 +126,39 @@ public class BankServiceImpl implements BankService {
         }
 
         bankRepository.transfer(fromAccountId, toAccountId, amount);
+
+        Transaction senderTransaction = new Transaction(
+                0,
+                fromAccountId,
+                "TRANSFER_OUT",
+                amount,
+                toAccountId,
+                null
+        );
+
+        Transaction receiverTransaction = new Transaction(
+                0,
+                toAccountId,
+                "TRANSFER_IN",
+                amount,
+                fromAccountId,
+                null
+        );
+
+        bankRepository.createTransaction(senderTransaction);
+        bankRepository.createTransaction(receiverTransaction);
+
         return bankRepository.findAccountById(fromAccountId);
+    }
+
+    @Override
+    public List<Transaction> getTransactionHistory(int accountId) {
+
+        if (bankRepository.findAccountById(accountId) == null) {
+            throw new IllegalArgumentException(
+                    "Account does not exist.");
+        }
+
+        return bankRepository.findTransactionsByAccountId(accountId);
     }
 }
