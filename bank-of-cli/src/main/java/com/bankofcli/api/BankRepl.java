@@ -94,7 +94,7 @@ public class BankRepl {
                     case 1 -> checkBalance(account);
                     case 2 -> account = deposit(account);
                     case 3 -> account = withdraw(account);
-                    case 4 -> System.out.println("Transfer selected.");
+                    case 4 -> account = transfer(account);
                     case 5 -> System.out.println("Transaction History selected.");
                     case 6 -> {
                         System.out.println("Logging out...");
@@ -137,4 +137,22 @@ public class BankRepl {
         return updatedAccount;
     }
 
+    private Account transfer(Account account) {
+        System.out.println("Enter recipient account ID:");
+        int toAccountId = SCAN.nextInt();
+
+        System.out.println("Enter transfer amount:");
+        BigDecimal amount = SCAN.nextBigDecimal();
+
+        Account updatedAccount = bankService.transfer(
+                account.getAccountId(),
+                toAccountId,
+                amount
+        );
+
+        System.out.println("Transfer successful.");
+        System.out.println("Current balance: $" + updatedAccount.getBalance());
+
+        return updatedAccount;
+    }
 }

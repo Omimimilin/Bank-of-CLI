@@ -138,4 +138,52 @@ public class BankRepositoryImpl implements BankRepository{
             throw new IllegalStateException("Could not withdraw", e);
         }
     }
+
+    @Override
+    public void transfer(int fromAccountId, int toAccountId, BigDecimal amount) {
+
+        String withdrawSql = """
+                UPDATE accounts
+                SET balance = balance - ?
+                WHERE account_id = ?
+                """;
+
+        String depositSql = """
+                UPDATE accounts
+                SET balance = balance + ?
+                WHERE account_id = ?
+                """;
+
+        try (Connection connection = ConnectionFactory
+            .getConnectionFactory()
+            .getConnection();
+            PreparedStatement withdrawStatement =
+                    connection.prepareStatement(withdrawSql);
+            PreparedStatement depositStatement =
+                    connection.prepareStatement(depositSql)) {
+
+            connection.setAutoCommit(false);
+
+            try {
+                withdrawStatement.setBigDecimal(1, amount);
+                withdrawStatement.setInt(2, fromAccountId);
+
+                depositStatement.setBigDecimal(1, amount);
+                depositStatement.setInt(2, toAccountId);
+
+                withdrawStatement.executeUpdate();
+                depositStatement.executeUpdate();
+
+                connection.commit();
+
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
+
+        } catch (SQLException e) {
+            throw new IllegalStateException(
+                    "Could not complete transfer", e);
+        }
+    }
 }

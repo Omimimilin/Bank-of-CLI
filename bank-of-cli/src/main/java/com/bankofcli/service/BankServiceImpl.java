@@ -64,4 +64,40 @@ public class BankServiceImpl implements BankService {
 
         return bankRepository.withdraw(accountId, amount);
     }
+
+    @Override
+    public Account transfer(int fromAccountId, int toAccountId, BigDecimal amount) {
+
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException(
+                    "Transfer amount must be greater than zero.");
+        }
+
+        if (fromAccountId == toAccountId) {
+            throw new IllegalArgumentException(
+                    "You cannot transfer money to the same account.");
+        }
+
+        Account sender = bankRepository.findAccountById(fromAccountId);
+
+        if (sender == null) {
+            throw new IllegalArgumentException(
+                    "Sender account does not exist.");
+        }
+
+        Account receiver = bankRepository.findAccountById(toAccountId);
+
+        if (receiver == null) {
+            throw new IllegalArgumentException(
+                    "Recipient account does not exist.");
+        }
+
+        if (amount.compareTo(sender.getBalance()) > 0) {
+            throw new IllegalArgumentException(
+                    "Insufficient funds.");
+        }
+
+        bankRepository.transfer(fromAccountId, toAccountId, amount);
+        return bankRepository.findAccountById(fromAccountId);
+    }
 }

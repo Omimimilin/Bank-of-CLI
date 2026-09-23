@@ -9,4 +9,5 @@ public interface BankRepository {
     Account findAccountById(int accountId);
     Account deposit(int accountId, BigDecimal amount);
     Account withdraw(int accountId, BigDecimal amount);
+    void transfer(int fromAccountId, int toAccountId, BigDecimal amount);
 }

@@ -11,4 +11,5 @@ public interface BankService {
     Account login(int accountId, int pin);
     Account deposit(int accountId, BigDecimal amount);
     Account withdraw(int accountId, BigDecimal amount);
+    Account transfer(int fromAccountId, int toAccountId, BigDecimal amount);
 }
