@@ -101,6 +101,32 @@ logs/bank-of-cli.log
 
 Logs include successful operations and errors such as invalid deposits, insufficient funds, failed logins, and invalid transfers.
 
+## ER Diagram
+
+                 ┌──────────────────┐
+                 │     ACCOUNTS     |
+                 │──────────────────│
+                 │ PK account_id    │
+                 │    pin           │
+                 │    balance       │
+                 └───────┬──────────┘
+                         │
+              ┌──────────┴──────────┐ 
+              │                     │
+           1:N│                  1:N│
+              │                     │
+              ▼                     ▼
+       ┌────────────────────────────────┐
+       │          TRANSACTIONS          │
+       │────────────────────────────────│
+       │ PK transaction_id              │
+       │ FK account_id                  │
+       │    transaction_type            │
+       │    amount                      │
+       │ FK related_account_id          │
+       │    created_at                  │
+       └────────────────────────────────┘
+
 ## Author
 
 Naomi Lin
