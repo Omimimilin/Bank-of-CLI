@@ -3,12 +3,16 @@ package com.bankofcli.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bankofcli.domain.Account;
 import com.bankofcli.domain.Transaction;
 import com.bankofcli.persistence.BankRepository;
 
 public class BankServiceImpl implements BankService {
     private final BankRepository bankRepository;
+    private static Logger logger = LoggerFactory.getLogger(BankServiceImpl.class);
 
     public BankServiceImpl(BankRepository bankRepository){
         this.bankRepository = bankRepository;
@@ -21,6 +25,7 @@ public class BankServiceImpl implements BankService {
         }
 
         bankRepository.createAccount(account);
+        logger.info("Account {} successfully created.", account.getAccountId());
     }
 
     @Override
@@ -31,16 +36,20 @@ public class BankServiceImpl implements BankService {
             throw new IllegalArgumentException("Invalid account ID or PIN.");
         }
 
+        logger.info("Successful login for account {}", accountId);
+
         return account;
     }
 
     @Override
     public Account deposit(int accountId, BigDecimal amount){
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            logger.error("Deposit failed for account {}. Invalid amount: {}", accountId, amount);
             throw new IllegalArgumentException("Deposit amount must be greater than zero.");
         }
 
         if (bankRepository.findAccountById(accountId) == null) {
+            logger.error("Deposit failed. Account {} does not exist.", accountId);
             throw new IllegalArgumentException("Account does not exist.");
         }
 
@@ -56,13 +65,15 @@ public class BankServiceImpl implements BankService {
         );
 
         bankRepository.createTransaction(transaction);
+        logger.info("Deposit successful for account {}. Amount: {}", accountId, amount);
 
         return updatedAccount;
     }
 
-    @Override 
+    @Override
     public Account withdraw(int accountId, BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            logger.error("Withdraw failed for account {}. Invalid amount: {}", accountId, amount);
         throw new IllegalArgumentException(
                 "Withdrawal amount must be greater than zero.");
         }
@@ -70,10 +81,12 @@ public class BankServiceImpl implements BankService {
         Account account = bankRepository.findAccountById(accountId);
 
         if (account == null) {
+            logger.error("Withdraw failed. Account {} does not exist.", accountId);
             throw new IllegalArgumentException("Account does not exist.");
         }
 
         if (amount.compareTo(account.getBalance()) > 0) {
+            logger.error("Withdraw failed for account {}. Insufficient funds. Requested {}, Balance {}", accountId, amount, account.getBalance());
             throw new IllegalArgumentException("Insufficient funds.");
         }
 
@@ -89,6 +102,7 @@ public class BankServiceImpl implements BankService {
         );
 
         bankRepository.createTransaction(transaction);
+        logger.info("Withdraw successful for account {}. Amount {}", accountId, amount);
 
         return updatedAccount;
     }
@@ -97,11 +111,19 @@ public class BankServiceImpl implements BankService {
     public Account transfer(int fromAccountId, int toAccountId, BigDecimal amount) {
 
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            logger.error(
+                "Transfer failed from account {}. Invalid amount: {}",
+                fromAccountId,
+                amount);
             throw new IllegalArgumentException(
                     "Transfer amount must be greater than zero.");
         }
 
         if (fromAccountId == toAccountId) {
+            logger.error(
+                "Transfer failed. Account {} attempted to transfer to itself.",
+                fromAccountId
+        );
             throw new IllegalArgumentException(
                     "You cannot transfer money to the same account.");
         }
@@ -109,6 +131,10 @@ public class BankServiceImpl implements BankService {
         Account sender = bankRepository.findAccountById(fromAccountId);
 
         if (sender == null) {
+            logger.error(
+                "Transfer failed. Sender account {} does not exist.",
+                fromAccountId
+        );
             throw new IllegalArgumentException(
                     "Sender account does not exist.");
         }
@@ -116,11 +142,22 @@ public class BankServiceImpl implements BankService {
         Account receiver = bankRepository.findAccountById(toAccountId);
 
         if (receiver == null) {
+            logger.error(
+                "Transfer failed. Recipient account {} does not exist.",
+                toAccountId
+        );
             throw new IllegalArgumentException(
                     "Recipient account does not exist.");
         }
 
         if (amount.compareTo(sender.getBalance()) > 0) {
+            logger.error(
+                "Transfer failed from account {} to account {}. Insufficient funds. Requested: {}, Balance: {}",
+                fromAccountId,
+                toAccountId,
+                amount,
+                sender.getBalance()
+        );
             throw new IllegalArgumentException(
                     "Insufficient funds.");
         }
@@ -148,6 +185,13 @@ public class BankServiceImpl implements BankService {
         bankRepository.createTransaction(senderTransaction);
         bankRepository.createTransaction(receiverTransaction);
 
+        logger.info(
+            "Transfer successful from account {} to account {}. Amount: {}",
+            fromAccountId,
+            toAccountId,
+            amount
+        );
+
         return bankRepository.findAccountById(fromAccountId);
     }
 
@@ -155,9 +199,20 @@ public class BankServiceImpl implements BankService {
     public List<Transaction> getTransactionHistory(int accountId) {
 
         if (bankRepository.findAccountById(accountId) == null) {
+            logger.error(
+                "Transaction history request failed. Account {} does not exist.",
+                accountId
+        );
             throw new IllegalArgumentException(
                     "Account does not exist.");
         }
+
+        List<Transaction> transactions =
+            bankRepository.findTransactionsByAccountId(accountId);
+
+        logger.info(
+            "Transaction history retrieved for account {}. {} transactions found.",
+            accountId, transactions.size());
 
         return bankRepository.findTransactionsByAccountId(accountId);
     }

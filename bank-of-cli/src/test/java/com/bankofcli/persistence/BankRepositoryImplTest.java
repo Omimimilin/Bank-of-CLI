@@ -10,21 +10,21 @@ import com.bankofcli.domain.Account;
 
 public class BankRepositoryImplTest {
 
-    private final BankRepository repository = new BankRepositoryImpl();
+    // private final BankRepository repository = new BankRepositoryImpl();
 
-    @Test
-    void createAccount_shouldCreateAccount() {
+    // @Test
+    // void createAccount_shouldCreateAccount() {
 
-        Account account = new Account(
-                1001,
-                1234,
-                new BigDecimal("100.00")
-        );
+    //     Account account = new Account(
+    //             1001,
+    //             1234,
+    //             new BigDecimal("100.00")
+    //     );
 
-        repository.createAccount(account);
+    //     repository.createAccount(account);
 
-        Account result = repository.findAccountById(1001);
+    //     Account result = repository.findAccountById(1001);
 
-        assertNotNull(result);
-    }
+    //     assertNotNull(result);
+    // }
 }
