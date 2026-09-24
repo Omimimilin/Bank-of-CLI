@@ -34,6 +34,8 @@ public class BankRepl {
                 handle(command);
             } catch (IllegalArgumentException e){
                 System.out.println("Error: " + e.getMessage());
+            } catch (IllegalStateException e) {
+                System.out.println("Service temporarily unavailable. Please try again later.");
             }
         }
     }
@@ -57,7 +59,6 @@ public class BankRepl {
         Account account = bankService.login(accountId, pin);
 
         System.out.println("Login successful.");
-        System.out.println("Current balance: $" + account.getBalance());
         showAccountMenu(account);
     }
 
@@ -89,7 +90,7 @@ public class BankRepl {
             System.out.println("3. Withdraw");
             System.out.println("4. Transfer");
             System.out.println("5. Transaction History");
-            System.out.println("6. Logout");
+            System.out.println("6. Logout\n Please choose an option using numbers 1-6");
             int command = SCAN.nextInt();
             try{
                 switch (command) {

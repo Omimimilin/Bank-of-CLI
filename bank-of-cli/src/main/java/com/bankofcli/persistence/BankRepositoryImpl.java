@@ -171,8 +171,12 @@ public class BankRepositoryImpl implements BankRepository{
                 depositStatement.setBigDecimal(1, amount);
                 depositStatement.setInt(2, toAccountId);
 
-                withdrawStatement.executeUpdate();
-                depositStatement.executeUpdate();
+                int withdrawnRows = withdrawStatement.executeUpdate();
+                int depositedRows = depositStatement.executeUpdate();
+
+                if (withdrawnRows != 1 || depositedRows != 1) {
+                    throw new SQLException("One or both accounts do not exist.");
+                }
 
                 connection.commit();
 

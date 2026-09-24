@@ -17,7 +17,18 @@
 -- );
 
 -- DELETE FROM transactions
--- WHERE account_id = 1001;
+-- WHERE account_id = 1001
+--    OR related_account_id = 1001;
 
 -- DELETE FROM accounts
 -- WHERE account_id = 1001;
+
+-- SELECT * FROM accounts;
+-- SELECT * FROM transactions;
+
+-- DELETE FROM transactions
+-- WHERE account_id IN (1001, 1002)
+--    OR related_account_id IN (1001, 1002);
+
+-- DELETE FROM accounts
+-- WHERE account_id IN (1001, 1002);

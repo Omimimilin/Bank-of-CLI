@@ -13,3 +13,44 @@
 2026-09-24 09:50:17 ERROR c.bankofcli.service.BankServiceImpl - Withdraw failed for account 69. Insufficient funds. Requested 600, Balance 100.00
 2026-09-24 09:50:33 INFO  c.bankofcli.service.BankServiceImpl - Transfer successful from account 69 to account 1234. Amount: 60
 2026-09-24 09:50:37 INFO  c.bankofcli.service.BankServiceImpl - Transaction history retrieved for account 69. 2 transactions found.
+2026-09-24 13:26:08 INFO  c.bankofcli.service.BankServiceImpl - Account 1001 successfully created.
+2026-09-24 13:39:27 INFO  c.bankofcli.service.BankServiceImpl - Successful login for account 1001
+2026-09-24 13:39:27 INFO  c.bankofcli.service.BankServiceImpl - Account 1001 successfully created.
+2026-09-24 13:44:13 INFO  c.bankofcli.service.BankServiceImpl - Deposit successful for account 1001. Amount: 50.00
+2026-09-24 13:44:13 INFO  c.bankofcli.service.BankServiceImpl - Successful login for account 1001
+2026-09-24 13:44:13 INFO  c.bankofcli.service.BankServiceImpl - Account 1001 successfully created.
+2026-09-24 13:44:13 ERROR c.bankofcli.service.BankServiceImpl - Deposit failed for account 1001. Invalid amount: 0
+2026-09-24 13:47:13 INFO  c.bankofcli.service.BankServiceImpl - Deposit successful for account 1001. Amount: 50.00
+2026-09-24 13:47:13 INFO  c.bankofcli.service.BankServiceImpl - Successful login for account 1001
+2026-09-24 13:47:13 INFO  c.bankofcli.service.BankServiceImpl - Account 1001 successfully created.
+2026-09-24 13:47:13 ERROR c.bankofcli.service.BankServiceImpl - Deposit failed for account 1001. Invalid amount: 0
+2026-09-24 13:47:13 ERROR c.bankofcli.service.BankServiceImpl - Withdraw failed for account 1001. Insufficient funds. Requested 100.00, Balance 50.00
+2026-09-24 13:47:13 INFO  c.bankofcli.service.BankServiceImpl - Withdraw successful for account 1001. Amount 40.00
+2026-09-24 13:49:18 INFO  c.bankofcli.service.BankServiceImpl - Deposit successful for account 1001. Amount: 50.00
+2026-09-24 13:49:18 INFO  c.bankofcli.service.BankServiceImpl - Successful login for account 1001
+2026-09-24 13:49:18 INFO  c.bankofcli.service.BankServiceImpl - Account 1001 successfully created.
+2026-09-24 13:49:18 ERROR c.bankofcli.service.BankServiceImpl - Transfer failed from account 1001 to account 1002. Insufficient funds. Requested: 100.00, Balance: 50.00
+2026-09-24 13:49:18 INFO  c.bankofcli.service.BankServiceImpl - Transfer successful from account 1001 to account 1002. Amount: 40.00
+2026-09-24 13:49:18 ERROR c.bankofcli.service.BankServiceImpl - Deposit failed for account 1001. Invalid amount: 0
+2026-09-24 13:49:18 ERROR c.bankofcli.service.BankServiceImpl - Withdraw failed for account 1001. Insufficient funds. Requested 100.00, Balance 50.00
+2026-09-24 13:49:18 INFO  c.bankofcli.service.BankServiceImpl - Withdraw successful for account 1001. Amount 40.00
+2026-09-24 13:50:43 INFO  c.bankofcli.service.BankServiceImpl - Deposit successful for account 1001. Amount: 50.00
+2026-09-24 13:50:43 INFO  c.bankofcli.service.BankServiceImpl - Successful login for account 1001
+2026-09-24 13:50:43 INFO  c.bankofcli.service.BankServiceImpl - Account 1001 successfully created.
+2026-09-24 13:50:43 ERROR c.bankofcli.service.BankServiceImpl - Transfer failed from account 1001 to account 1002. Insufficient funds. Requested: 100.00, Balance: 50.00
+2026-09-24 13:50:43 INFO  c.bankofcli.service.BankServiceImpl - Transaction history retrieved for account 1001. 1 transactions found.
+2026-09-24 13:50:43 INFO  c.bankofcli.service.BankServiceImpl - Transfer successful from account 1001 to account 1002. Amount: 40.00
+2026-09-24 13:50:43 ERROR c.bankofcli.service.BankServiceImpl - Deposit failed for account 1001. Invalid amount: 0
+2026-09-24 13:50:43 ERROR c.bankofcli.service.BankServiceImpl - Withdraw failed for account 1001. Insufficient funds. Requested 100.00, Balance 50.00
+2026-09-24 13:50:43 INFO  c.bankofcli.service.BankServiceImpl - Withdraw successful for account 1001. Amount 40.00
+2026-09-24 13:50:43 ERROR c.bankofcli.service.BankServiceImpl - Transaction history request failed. Account 1001 does not exist.
+2026-09-24 13:52:24 INFO  c.bankofcli.service.BankServiceImpl - Deposit successful for account 1001. Amount: 50.00
+2026-09-24 13:52:24 INFO  c.bankofcli.service.BankServiceImpl - Successful login for account 1001
+2026-09-24 13:52:24 INFO  c.bankofcli.service.BankServiceImpl - Account 1001 successfully created.
+2026-09-24 13:52:24 ERROR c.bankofcli.service.BankServiceImpl - Transfer failed from account 1001 to account 1002. Insufficient funds. Requested: 100.00, Balance: 50.00
+2026-09-24 13:52:24 INFO  c.bankofcli.service.BankServiceImpl - Transaction history retrieved for account 1001. 1 transactions found.
+2026-09-24 13:52:24 INFO  c.bankofcli.service.BankServiceImpl - Transfer successful from account 1001 to account 1002. Amount: 40.00
+2026-09-24 13:52:24 ERROR c.bankofcli.service.BankServiceImpl - Deposit failed for account 1001. Invalid amount: 0
+2026-09-24 13:52:24 ERROR c.bankofcli.service.BankServiceImpl - Withdraw failed for account 1001. Insufficient funds. Requested 100.00, Balance 50.00
+2026-09-24 13:52:24 INFO  c.bankofcli.service.BankServiceImpl - Withdraw successful for account 1001. Amount 40.00
+2026-09-24 13:52:24 ERROR c.bankofcli.service.BankServiceImpl - Transaction history request failed. Account 1001 does not exist.
