@@ -127,6 +127,20 @@ Logs include successful operations and errors such as invalid deposits, insuffic
        │    created_at                  │
        └────────────────────────────────┘
 
+┌───────────────────────┐               ┌─────────────────────────────┐
+│       ACCOUNTS        │               │        TRANSACTIONS         │
+├───────────────────────┤               ├─────────────────────────────┤
+│ PK account_id         │               │ PK transaction_id           │
+│    pin                │   1      N    │ FK account_id               │
+│    balance            │─────────────▶│    transaction_type         │
+└───────────────────────┘               │    amount                   │
+                                        │ FK related_account_id       │
+                                        │    created_at               │
+                                        └─────────────────────────────┘
+
+## Slide Deck Link
+https://canva.link/665o6kuzkyez86z
+
 ## Author
 
 Naomi Lin
